@@ -1,0 +1,52 @@
+name: beIN SPORTS TR EPG
+
+on:
+  schedule:
+    - cron: '0 3,15 * * *'   # 2x per dag (UTC)
+  workflow_dispatch:          # handmatig starten via de Actions-tab
+
+permissions:
+  contents: write
+
+jobs:
+  grab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: iptv-org/epg installeren
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/epg.git grabber
+          cd grabber && npm install --no-audit --no-fund
+
+      - name: EPG ophalen van digiturk.com.tr
+        env:
+          TR_PROXY: ${{ secrets.TR_PROXY }}   # optioneel, bv. socks5://user:pass@host:port
+        run: |
+          cd grabber
+          ARGS="--channels=../bein-tr.channels.xml --output=../guide.xml --days=3 --timeout=60000"
+          if [ -n "$TR_PROXY" ]; then ARGS="$ARGS --proxy=$TR_PROXY"; fi
+          npm run grab --- $ARGS
+
+      - name: Controleren
+        run: |
+          n=$(grep -o '<programme ' guide.xml | wc -l || echo 0)
+          echo "Aantal programma's: $n"
+          if [ "$n" -lt 10 ]; then
+            echo "::error::Te weinig programma's ($n). Digiturk blokkeert waarschijnlijk niet-Turkse IP's: stel TR_PROXY in."
+            exit 1
+          fi
+          mkdir -p epg && mv guide.xml epg/bein-tr.xml
+
+      - name: Committen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add epg/bein-tr.xml
+          git diff --cached --quiet || git commit -m "beIN TR EPG $(date -u +%F_%H%M)"
+          git push
