@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<channels>
+  <channel site="digiturk.com.tr" site_id="193" lang="tr" xmltv_id="beINSports1.tr">beIN SPORTS 1</channel>
+  <channel site="digiturk.com.tr" site_id="310" lang="tr" xmltv_id="beINSports2.tr">beIN SPORTS 2</channel>
+  <channel site="digiturk.com.tr" site_id="312" lang="tr" xmltv_id="beINSports3.tr">beIN SPORTS 3</channel>
+  <channel site="digiturk.com.tr" site_id="495" lang="tr" xmltv_id="beINSports4.tr">beIN SPORTS 4</channel>
+  <channel site="digiturk.com.tr" site_id="506" lang="tr" xmltv_id="beINSports5.tr">beIN SPORTS 5</channel>
+  <channel site="digiturk.com.tr" site_id="507" lang="tr" xmltv_id="beINSportsMax1.tr">beIN SPORTS MAX 1</channel>
+  <channel site="digiturk.com.tr" site_id="508" lang="tr" xmltv_id="beINSportsMax2.tr">beIN SPORTS MAX 2</channel>
+  <channel site="digiturk.com.tr" site_id="541" lang="tr" xmltv_id="beINSportsHaber.tr">beIN SPORTS HABER</channel>
+</channels>
